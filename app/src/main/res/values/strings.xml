@@ -3,4 +3,18 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="reps_string">Reps</string>
+    <string name="peak_string">Peak</string>
+    <string name="rest_string">Rest</string>
+
+    <string name="peak_mode">Sprint</string>
+    <string name="rest_mode">Rest</string>
+    <string name="warmup_mode">Warm-up</string>
+    <string name="cooldown_mode">Cool-down</string>
+
+    <string name="total_time">Total</string>
+    <string name="segment_time">Segment</string>
+    <string name="remain_time">Remaining</string>
+    <string name="rep_number">Repetition</string>
 </resources>

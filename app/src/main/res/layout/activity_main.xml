@@ -1,20 +1,101 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/reps_string"
+        android:id="@+id/reps_textView"
+        />
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/peak_string"
+        android:id="@+id/peak_textView"
+        android:layout_toRightOf="@id/reps_textView"
+        />
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/rest_string"
+        android:id="@+id/rest_textView"
+        android:layout_toRightOf="@id/peak_textView"
+        />
+
+    <NumberPicker
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/reps_picker"
+        android:layout_below="@id/reps_textView"
+        android:layout_alignLeft="@id/reps_textView"
+        android:descendantFocusability="blocksDescendants"
+        />
+
+    <NumberPicker
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/peak_picker"
+        android:layout_below="@id/peak_textView"
+        android:layout_alignLeft="@id/peak_textView"
+        android:descendantFocusability="blocksDescendants"
+        />
+
+    <NumberPicker
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/rest_picker"
+        android:layout_below="@id/rest_textView"
+        android:layout_alignLeft="@id/rest_textView"
+        android:descendantFocusability="blocksDescendants"
+       />
+
+    <TextView
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/timerTextView"/>
+        android:id="@+id/timerTextView"
+        android:layout_below="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:id="@+id/button"
-        android:layout_below="@id/timerTextView"
-        android:text="Button"/>
+        android:text="Button"
+        android:layout_below="@+id/reps_picker"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/rest_picker"
+        android:layout_alignEnd="@+id/rest_picker" />
+
+
 </RelativeLayout>

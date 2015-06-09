@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 
@@ -18,9 +19,16 @@ public class MainActivity extends ActionBarActivity {
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
+    MediaPlayer mpStart = new MediaPlayer();
+    MediaPlayer mpStop = new MediaPlayer();
+    MediaPlayer mpEnd = new MediaPlayer();
+
+    NumberPicker reps, peak, rest;
+
+
+
     Runnable timerRunnable = new Runnable() {
 
-    MediaPlayer mp;
 
         @Override
         public void run() {
@@ -33,11 +41,17 @@ public class MainActivity extends ActionBarActivity {
             int minutes = seconds / 60;
             seconds = seconds % 60;
 
-            timerTextView.setText(String.format("%d:%02d.%1d", minutes, seconds, tenths));
+            int workout_time = reps.getValue() * ( peak.getValue() + rest.getValue() ) + rest.getValue();
+
+            int work_min = (int) (workout_time / 60);
+            int work_sec = workout_time - (work_min * 60);
+
+//            timerTextView.setText(String.format("%d:%02d.%1d", minutes, seconds, tenths));
+            timerTextView.setText(String.format("%d:%02d", work_min, work_sec));
 
             
             if( total_seconds == 10 )
-                mp.start();
+                mpStart.start();
 
             timerHandler.postDelayed(this, 500);
         }
@@ -51,24 +65,47 @@ public class MainActivity extends ActionBarActivity {
         timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         Button b = (Button) findViewById(R.id.button);
-        b.setText("start");
+        b.setText("Start Workout");
 
-        final MediaPlayer mp = MediaPlayer.create(this, R.raw.time_on);
+        mpStart = MediaPlayer.create(this, R.raw.time_on);
+        mpStop = MediaPlayer.create(this, R.raw.time_off);
+        mpEnd = MediaPlayer.create(this, R.raw.time_off);
+
+        reps = (NumberPicker) findViewById(R.id.reps_picker);
+        reps.setMinValue(1);
+        reps.setMaxValue(15);
+        reps.setValue(8);
+        reps.setWrapSelectorWheel(false);
+
+        peak = (NumberPicker) findViewById(R.id.peak_picker);
+        peak.setMinValue(15);
+        peak.setMaxValue(45);
+        peak.setValue(30);
+        peak.setWrapSelectorWheel(false);
+
+        rest = (NumberPicker) findViewById(R.id.rest_picker);
+        rest.setMinValue(60);
+        rest.setMaxValue(120);
+        rest.setValue(90);
+        rest.setWrapSelectorWheel(false);
+
+        timerHandler.postDelayed(timerRunnable, 0);
 
         b.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                mp.start();
 
                 Button b = (Button) v;
-                if (b.getText().equals("stop")) {
+                if (b.getText().equals("Pause")) {
+                    mpStart.start();
                     timerHandler.removeCallbacks(timerRunnable);
-                    b.setText("start");
+                    b.setText("Resume");
                 } else {
+                    mpStop.start();
                     startTime = System.currentTimeMillis();
                     timerHandler.postDelayed(timerRunnable, 0);
-                    b.setText("stop");
+                    b.setText("Pause");
                 }
             }
         });
