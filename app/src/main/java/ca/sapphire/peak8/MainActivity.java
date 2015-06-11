@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
@@ -31,6 +35,8 @@ public class MainActivity extends ActionBarActivity {
     ProgressBar mainProg, segmentProg;
 
     Button modeButton;
+
+    Animation mAnimation;
 
     peak8 pk8;
 
@@ -106,13 +112,10 @@ public class MainActivity extends ActionBarActivity {
         elapsed_text = (TextView) findViewById(R.id.elapsed_textView);
         total_text = (TextView) findViewById(R.id.total_textView);
 
-        Button b = (Button) findViewById(R.id.button);
-        b.setText("Start Workout");
-
         mpStart = MediaPlayer.create(this, R.raw.time_on);
         mpStop = MediaPlayer.create(this, R.raw.time_off);
         mpEnd = MediaPlayer.create(this, R.raw.done);
-        mpClick = MediaPlayer.create(this, R.raw.click);
+//        mpClick = MediaPlayer.create(this, R.raw.click);
 
         reps = (NumberPicker) findViewById(R.id.reps_picker);
         reps.setMinValue(1);
@@ -140,45 +143,55 @@ public class MainActivity extends ActionBarActivity {
         pk8 = new peak8(reps.getValue(), peak.getValue(), rest.getValue());
         pk8.update();
 
+        mAnimation = new AlphaAnimation(1, 0);
+        mAnimation.setDuration(500);
+        mAnimation.setInterpolator(new LinearInterpolator());
+        mAnimation.setRepeatCount(Animation.INFINITE);
+        mAnimation.setRepeatMode(Animation.REVERSE);
+
         timerHandler.postDelayed(timerRunnable, 0);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        b.setOnClickListener(new View.OnClickListener() {
+        modeButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 mpClick.start();
-                Button b = (Button) v;
-                if( pk8.isRunning) {
-                    pk8.stop();
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    timerHandler.removeCallbacks(timerRunnable);
-                    b.setText("Resume workout");
-                }
-                else {
-                    pk8.start();
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                    timerHandler.postDelayed(timerRunnable, 0);
-                    b.setText("Pause");
+                if (pk8.isRunning) {
+                    stop();
+                } else {
+                    start();
                 }
             }
         });
+    }
+
+    private void start() {
+        pk8.start();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        timerHandler.postDelayed(timerRunnable, 0);
+        modeButton.clearAnimation();
+    }
+
+    private void stop() {
+        pk8.stop();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        timerHandler.removeCallbacks(timerRunnable);
+        modeButton.startAnimation(mAnimation);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         timerHandler.removeCallbacks(timerRunnable);
-        Button b = (Button)findViewById(R.id.button);
-        b.setText("Resume");
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu( menu );
     }
 
     @Override
@@ -186,13 +199,27 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        View view = findViewById(R.id.action_bar);
+
+        switch( item.getItemId() ) {
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_start:
+                view.setSoundEffectsEnabled(true);
+                view.playSoundEffect(SoundEffectConstants.CLICK);
+//                mpClick.start();
+                start();
+                return true;
+
+            case R.id.action_stop:
+                mpClick.start();
+                stop();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
