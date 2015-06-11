@@ -66,16 +66,6 @@
         android:descendantFocusability="blocksDescendants"
        />
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timerTextView"
-        android:layout_below="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
-
     <Button
         android:layout_width="240dp"
         android:layout_height="wrap_content"
@@ -85,17 +75,69 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         />
+    <Button
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/mode_button"
+        android:text="Waiting to start"
+        android:layout_below="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
 
     <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
+        android:layout_height="20dp"
+        android:id="@+id/segment_progress"
         android:layout_centerVertical="true"
+        android:layout_below="@id/mode_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/rest_picker"
-        android:layout_alignEnd="@+id/rest_picker" />
+        android:layout_alignEnd="@+id/rest_picker"
+        />
 
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/main_progress"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/segment_progress"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/rest_picker"
+        android:layout_alignEnd="@+id/rest_picker"
+        />
 
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/peak_string"
+        android:id="@+id/segment_textView"
+        android:layout_below="@id/main_progress"
+        />
+
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/peak_string"
+        android:id="@+id/elapsed_textView"
+        android:layout_below="@id/segment_textView"
+        />
+
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/peak_string"
+        android:id="@+id/total_textView"
+        android:layout_below="@id/elapsed_textView"
+        />
 </RelativeLayout>
