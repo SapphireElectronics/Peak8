@@ -1,7 +1,7 @@
 package ca.sapphire.peak8;
 
-/**
- * Created by Admin on 10/06/15.
+/*
+ * Created by Ashley on 10/06/15.
  */
 
 
@@ -12,17 +12,18 @@ public class peak8 {
 
     private long accumulated = 0;   // total run time since start in milliseconds
 
-    private int reps;               // number of repetitions to perform
-    private long peak;              // length of a peak segment in milliseconds
-    private long rest;              // length of a rest segment in milliseconds
-    private int repCount = 0;       // number of repetitions performed
-    private long totalTime;         // total time for full run in milliseconds
+    public int reps;                // number of repetitions to perform
+    public long peak;               // length of a peak segment in milliseconds
+    public long rest;               // length of a rest segment in milliseconds
+    public int repCount = 0;        // number of repetition currently being performed
+    public long totalTime;          // total time for full run in milliseconds
 
-    public enum Mode{ START, WARMUP, RUN, REST, COOLDOWN, END };
+    public enum Mode{ START, WARMUP, RUN, REST, COOLDOWN, END }
     public Mode mode = Mode.START;
 
     public boolean isRunning = false;
     public boolean modeChanged = true;
+    public boolean initialStartup = true;
 
     public peak8( int reps, long peak, long rest )
     {
@@ -48,7 +49,7 @@ public class peak8 {
         isRunning = false;
         segmentAccum = 0;
         accumulated = 0;
-        repCount = 0;
+        repCount = 1;
         mode = Mode.START;
         segmentStart = System.currentTimeMillis();
     }
@@ -56,6 +57,7 @@ public class peak8 {
     public void start() {
         if( !isRunning ) {
             isRunning = true;
+            initialStartup = false;
             segmentStart = System.currentTimeMillis();
         }
     }
@@ -84,11 +86,13 @@ public class peak8 {
                 break;
             case RUN:
                 segmentLength = rest;
-                repCount++;
-                if( repCount >= reps )
+                if( repCount >= reps ) {
                     mode = Mode.COOLDOWN;
-                else
+                }
+                else {
+                    repCount++;
                     mode = Mode.REST;
+                }
                 break;
             case REST:
                 segmentLength = peak;
@@ -105,10 +109,7 @@ public class peak8 {
     }
 
     public void update() {
-        if( !isRunning )
-            return;
-
-        if( mode == Mode.END)
+        if( !isRunning || (mode == Mode.END) )
             return;
 
         long segmentTimeNow = segmentAccum + ( System.currentTimeMillis()-segmentStart );
@@ -132,11 +133,11 @@ public class peak8 {
     }
 
     public int getTotalMins() {
-        return (int) getTotalTime()/60;
+        return getTotalTime()/60;
     }
 
     public int getTotalSecs() {
-        return getTotalTime() - (getTotalMins() * 60);
+        return getTotalTime()%60;
     }
 
     public int getElapsedTime() {
@@ -144,10 +145,10 @@ public class peak8 {
     }
 
     public int getElapsedMins() {
-        return (int) getElapsedTime()/60;
+        return getElapsedTime()/60;
     }
 
     public int getElapsedSecs() {
-        return getElapsedTime() - (getElapsedMins()*60);
+        return getElapsedTime()%60;
     }
 }
