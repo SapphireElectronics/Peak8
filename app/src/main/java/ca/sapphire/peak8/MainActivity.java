@@ -1,6 +1,7 @@
 package ca.sapphire.peak8;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Bundle;
@@ -117,22 +118,24 @@ public class MainActivity extends AppCompatActivity {
         mpEnd = MediaPlayer.create(this, R.raw.done);
         mpClick = MediaPlayer.create(this, R.raw.click);
 
+        SharedPreferences settings = getPreferences( MODE_PRIVATE );
+
         reps = (NumberPicker) findViewById(R.id.reps_picker);
         reps.setMinValue(1);
         reps.setMaxValue(15);
-        reps.setValue(8);
+        reps.setValue(settings.getInt("Reps", 8));
         reps.setWrapSelectorWheel(false);
 
         peak = (NumberPicker) findViewById(R.id.peak_picker);
         peak.setMinValue(3);
         peak.setMaxValue(45);
-        peak.setValue(30);
+        peak.setValue(settings.getInt("Peak", 30));
         peak.setWrapSelectorWheel(false);
 
         rest = (NumberPicker) findViewById(R.id.rest_picker);
         rest.setMinValue(5);
         rest.setMaxValue(120);
-        rest.setValue(90);
+        rest.setValue( settings.getInt( "Rest",90 ) );
         rest.setWrapSelectorWheel(false);
 
         modeButton = (Button) findViewById(R.id.mode_button);
@@ -166,10 +169,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    Boolean isPaused = false;
+    String currentModeText;
+
     private void start() {
         if( pk8.initialStartup ) {
+            setValues();
             pk8.setValues(reps.getValue(), peak.getValue(), rest.getValue());
         }
+        if( isPaused ) {
+            modeButton.setText(currentModeText);
+            isPaused = false;
+        }
+
         pk8.start();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         timerHandler.postDelayed(timerRunnable, 0);
@@ -180,8 +192,22 @@ public class MainActivity extends AppCompatActivity {
         pk8.stop();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         timerHandler.removeCallbacks(timerRunnable);
+        currentModeText = modeButton.getText().toString();
+        modeButton.setText("Paused ...");
+        isPaused = true;
         modeButton.startAnimation(mAnimation);
     }
+
+    public void setValues() {
+        SharedPreferences settings = getPreferences( MODE_PRIVATE );
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putInt( "Reps", reps.getValue() );
+        editor.putInt( "Peak", peak.getValue() );
+        editor.putInt( "Rest", rest.getValue() );
+        editor.commit();
+    }
+
 
     @Override
     public void onPause() {
