@@ -5,14 +5,17 @@
     tools:context=".MainActivity">
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always"
+        />
 
     <item
         android:id="@+id/action_start"
         android:icon="@drawable/ic_play_circle_outline_white_24dp"
         android:title="Start"
+        android:orderInCategory="1"
         app:showAsAction="always"
         />
 
@@ -20,6 +23,7 @@
         android:id="@+id/action_stop"
         android:icon="@drawable/ic_pause_circle_outline_white_24dp"
         android:title="Stop"
+        android:orderInCategory="2"
         app:showAsAction="always"
         />
 

@@ -102,6 +102,13 @@
         android:layout_alignEnd="@+id/rest_picker"
         />
 
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_below="@id/main_progress"
+        />
+
     <TextView
         android:layout_width="240dp"
         android:layout_height="wrap_content"
@@ -109,7 +116,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/peak_string"
         android:id="@+id/segment_textView"
-        android:layout_below="@id/main_progress"
+        android:layout_below="@id/spinner"
         />
 
     <TextView
@@ -131,4 +138,6 @@
         android:id="@+id/total_textView"
         android:layout_below="@id/elapsed_textView"
         />
+
+
 </RelativeLayout>

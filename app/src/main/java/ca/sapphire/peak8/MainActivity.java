@@ -1,5 +1,6 @@
 package ca.sapphire.peak8;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Bundle;
@@ -206,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch( item.getItemId() ) {
             case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+//                Intent intent = new Intent(this, DisplayMessageActivity.class);
+//                EditText editText = (EditText) findViewById(R.id.edit_message);
+//                String message = editText.getText().toString();
+//                intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
                 return true;
 
             case R.id.action_start:
